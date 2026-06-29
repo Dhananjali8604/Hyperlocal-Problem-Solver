@@ -1,132 +1,128 @@
-export type Role = 'citizen' | 'authority';
+export type UserRole = 'citizen' | 'authority';
 
-export type Language = 
-  | 'English' | 'Hindi' | 'Bengali' | 'Telugu' | 'Marathi' | 'Tamil' | 'Urdu' | 'Gujarati' | 'Kannada' | 'Malayalam' | 'Punjabi'
-  | 'en' | 'hi' | 'bn' | 'te' | 'mr' | 'ta' | 'ur' | 'gu' | 'kn' | 'ml' | 'pa';
+export type LanguageCode = 'en' | 'hi' | 'bn' | 'te' | 'mr' | 'ta' | 'gu' | 'kn' | 'ml' | 'pa';
 
-export interface AuthorityDetails {
-  department: string;
-  designation: string;
-  officeAddress: string;
-  district: string;
-  state: string;
-  isVerifiedGovt: boolean;
+export interface LanguageOption {
+  code: LanguageCode;
+  name: string;
+  nativeName: string;
 }
+
+export const LANGUAGES: LanguageOption[] = [
+  { code: 'en', name: 'English', nativeName: 'English' },
+  { code: 'hi', name: 'Hindi', nativeName: 'हिन्दी' },
+  { code: 'bn', name: 'Bengali', nativeName: 'বাংলা' },
+  { code: 'te', name: 'Telugu', nativeName: 'తెలుగు' },
+  { code: 'mr', name: 'Marathi', nativeName: 'मराठी' },
+  { code: 'ta', name: 'Tamil', nativeName: 'தமிழ்' },
+  { code: 'gu', name: 'Gujarati', nativeName: 'ગુજરાતી' },
+  { code: 'kn', name: 'Kannada', nativeName: 'ಕನ್ನಡ' },
+  { code: 'ml', name: 'Malayalam', nativeName: 'മലയാളം' },
+  { code: 'pa', name: 'Punjabi', nativeName: 'ਪੰਜਾਬੀ' },
+];
 
 export interface User {
   id: string;
   name: string;
+  phone?: string;
   email?: string;
+  password?: string;
+  role: UserRole;
   pincode: string;
-  role: Role;
-  language: Language;
   locality?: string;
-  authorityDetails?: AuthorityDetails;
-  badgesCount?: number;
-  badgesEarned?: number;
+  district?: string;
+  state?: string;
+  authorityCode?: string;
+  language: LanguageCode;
+  badgesCount: number;
 }
 
-export type ComplaintType = 'Infra' | 'Electrical' | 'Water' | 'Sanitation' | 'Other' | string;
-export type ComplaintCategory = 'water' | 'electrical' | 'garbage' | 'infrastructure' | 'sanitation' | 'other' | string;
+export type IssueType = 'Infrastructure' | 'Electrical' | 'Water Related' | 'Roads & Sanitation';
 
-export type ComplaintStatus = 
-  | 'reported'
-  | 'investigating'
+export type ComplaintStatus =
   | 'pending_validation'
-  | 'validated'
-  | 'declined'
+  | 'validated_compiled'
   | 'in_progress'
-  | 'resolved_pending_poll'
-  | 'resolved';
-
-export interface TriagePoll {
-  yes: number;
-  no: number;
-  voters: string[];
-}
-
-export interface ResolutionPoll {
-  yes: number;
-  no: number;
-  voters: string[];
-}
+  | 'pending_resolution_poll'
+  | 'resolved'
+  | 'declined';
 
 export interface Complaint {
   id: string;
   title: string;
   description: string;
-  mediaUrl?: string;
-  mediaType?: 'photo' | 'video';
+  translatedDescriptions?: Record<string, string>;
+  type: IssueType;
   locality: string;
   pincode: string;
-  lat?: number;
-  lng?: number;
   reporterName: string;
-  reporterPhone?: string;
-  reporterId: string;
+  reporterPhone: string;
+  photoUrl?: string;
+  videoUrl?: string;
+  urgencyRate: number;
+  similarCount: number;
   status: ComplaintStatus;
-  type?: ComplaintType;
-  category?: ComplaintCategory;
-  urgency?: 'high' | 'medium' | 'low' | string;
-  urgencyScore?: number;
-  similarReportsCount?: number;
-  verificationCount?: number;
-  verifiedBy?: string[];
-  authorityComments?: string[];
-  authorityRemark?: string;
-  completionPicture?: string;
-  triagePoll?: TriagePoll;
-  resolutionPoll?: ResolutionPoll;
-  aiSummary?: string;
-  createdAt: number;
-  resolvedAt?: number;
+  createdAt: string;
+  resolvedAt?: string;
+  proofPhotoUrl?: string;
+  pollId?: string;
+  resolutionPollId?: string;
+  googleMapsVerified: boolean;
+  mapCoordinates?: { lat: number; lng: number };
 }
 
-export interface CommunityPost {
+export type PollType = 'issue_validation' | 'resolution_validation';
+
+export interface Poll {
   id: string;
-  complaintId?: string;
+  complaintId: string;
   pincode: string;
-  title: string;
-  content: string;
-  type: 'triage_poll' | 'resolution_poll' | 'hero_congrats' | 'announcement';
-  createdAt: number;
-  authorName: string;
-  poll?: {
-    question: string;
-    yesVotes: number;
-    noVotes: number;
-    voters: string[];
-  };
+  locality: string;
+  question: string;
+  type: PollType;
+  yesVotes: number;
+  noVotes: number;
+  votedUserIds: string[];
+  createdAt: string;
+  status: 'active' | 'closed';
+  result?: 'yes' | 'no';
 }
 
 export interface Badge {
   id: string;
-  userId: string;
-  userName: string;
   complaintId: string;
   complaintTitle: string;
-  locality?: string;
+  citizenName: string;
+  citizenId: string;
   pincode: string;
-  issuedAt: number;
-  badgeNumber: string;
-  badgeType?: 'Bronze' | 'Silver' | 'Gold';
+  locality: string;
+  issuedAt: string;
+  badgeType: string;
 }
 
-export interface MunicipalRanking {
-  pincode: string;
-  authorityName: string;
+export interface AuthorityEvaluation {
+  id: string;
+  name: string;
   district: string;
   state: string;
-  efficiencyScore: number;
+  pincode: string;
   resolvedCount: number;
-  avgHoursToResolve: number;
-  aiRemark: string;
+  totalComplaints: number;
+  avgResolutionTimeHours: number;
+  efficiencyScore: number;
+  aiMonthlyRemark: string;
   rank: number;
 }
 
-export interface SeedData {
-  complaints: Complaint[];
-  posts: CommunityPost[];
-  badges: Badge[];
-  rankings: MunicipalRanking[];
+export interface CommunityPost {
+  id: string;
+  pincode: string;
+  locality: string;
+  type: 'poll' | 'hero_congrats' | 'system_alert' | 'resolution_showcase';
+  title: string;
+  content: string;
+  createdAt: string;
+  pollId?: string;
+  photoUrl?: string;
+  heroNames?: string[];
 }
