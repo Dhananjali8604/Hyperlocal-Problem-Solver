@@ -148,7 +148,7 @@ export const ReportIssueModal: React.FC<ReportIssueModalProps> = ({
     }
 
     setSubmitting(true);
-    setTriageFeedback('🤖 PACT AI is categorizing issue & checking Google Maps coordinates...');
+    setTriageFeedback(`🤖 PACT AI is categorizing issue & checking Google Maps coordinates for ${locality}...`);
 
     try {
       // Call Backend AI Classification
@@ -242,7 +242,7 @@ export const ReportIssueModal: React.FC<ReportIssueModalProps> = ({
               <div className="w-16 h-16 rounded-full border-4 border-sky-400 border-t-transparent animate-spin mx-auto shadow-lg" />
               <h3 className="text-xl font-bold text-sky-300 animate-pulse">{triageFeedback}</h3>
               <p className="text-xs text-sky-100/70 max-w-md mx-auto leading-relaxed">
-                PACT AI is querying Google Maps geospatial validation, generating locality verification poll for nearby residents, and logging badge tracking ID.
+                PACT AI is querying Google Maps geospatial validation for {locality || 'your locality'}, generating locality verification poll for nearby residents, and logging badge tracking ID.
               </p>
             </div>
           ) : (

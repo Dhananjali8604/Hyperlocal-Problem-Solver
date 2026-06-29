@@ -27,7 +27,7 @@ export const CommunityColumn: React.FC<CommunityColumnProps> = ({
   onVotePoll,
 }) => {
   // Filter for locality
-  const activePolls = polls.filter((p) => p.status === 'active' || p.pincode === '110001' || p.pincode === '560038');
+  const activePolls = polls.filter((p) => p.status === 'active');
 
   return (
     <div className="space-y-10 pb-16">

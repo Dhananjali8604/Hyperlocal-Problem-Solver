@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldAlert, Award, Globe, LogOut, MapPin, Building2, UserCircle } from 'lucide-react';
+import { ShieldAlert, Award, Globe, LogOut, MapPin, Building2, UserCircle, Bell } from 'lucide-react';
 import { User, LANGUAGES, LanguageCode } from '../types';
 import { useTranslation } from '../translations';
 
@@ -9,6 +9,7 @@ interface NavbarProps {
   onLanguageChange: (lang: LanguageCode) => void;
   activeTab: 'home' | 'community' | 'resolved';
   setActiveTab: (tab: 'home' | 'community' | 'resolved') => void;
+  activeIssueCount?: number;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -17,6 +18,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onLanguageChange,
   activeTab,
   setActiveTab,
+  activeIssueCount,
 }) => {
   const { t } = useTranslation(user?.language);
 
@@ -121,10 +123,25 @@ export const Navbar: React.FC<NavbarProps> = ({
 
                 {/* Role / Hero Badge */}
                 {user.role === 'citizen' ? (
-                  <div className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/15 border border-emerald-400/30 text-emerald-200 text-xs font-semibold shadow-sm">
-                    <Award className="w-4 h-4 text-emerald-400" />
-                    <span>{user.badgesCount} {t('badges')}</span>
-                  </div>
+                  <>
+                    <div className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/15 border border-emerald-400/30 text-emerald-200 text-xs font-semibold shadow-sm">
+                      <Award className="w-4 h-4 text-emerald-400" />
+                      <span>{user.badgesCount} {t('badges')}</span>
+                    </div>
+                    {activeIssueCount !== undefined && activeIssueCount > 0 && (
+                      <div className="relative group cursor-pointer">
+                        <div className="p-2 rounded-xl bg-red-500/20 border border-red-500/30 text-red-300">
+                          <Bell className="w-4 h-4 animate-pulse" />
+                        </div>
+                        <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 flex items-center justify-center text-[9px] font-bold text-white shadow-lg">
+                          {activeIssueCount}
+                        </div>
+                        <div className="absolute right-0 mt-2 w-48 p-2 bg-[#0e3b43] border border-red-400/30 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                          <p className="text-xs text-red-200 font-medium">You have {activeIssueCount} active issue(s) reported in your locality.</p>
+                        </div>
+                      </div>
+                    )}
+                  </>
                 ) : (
                   <div className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-amber-500/15 border border-amber-400/30 text-amber-200 text-xs font-semibold">
                     <Building2 className="w-3.5 h-3.5 text-amber-400" />

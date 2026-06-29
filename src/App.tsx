@@ -93,6 +93,20 @@ export default function App() {
   }, [authorities]);
 
   // Handlers
+  const isCitizen = user?.role === 'citizen';
+  const filterByLocation = (item: { pincode: string; locality: string }) => {
+    if (!user) return true;
+    if (!isCitizen) return true; // authorities handled in AuthorityDashboard
+    return (
+      item.pincode === user.pincode ||
+      (user.locality && item.locality?.toLowerCase() === user.locality.toLowerCase())
+    );
+  };
+
+  const localComplaints = complaints.filter(filterByLocation);
+  const localPolls = polls.filter(filterByLocation);
+  const localPosts = posts.filter(filterByLocation);
+
   const handleOnboardingComplete = (newUser: User) => {
     setUser(newUser);
   };
@@ -285,6 +299,7 @@ export default function App() {
         onLanguageChange={handleLanguageChange}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
+        activeIssueCount={user?.role === 'citizen' ? localComplaints.filter(c => c.status !== 'resolved').length : undefined}
       />
 
       {/* Main Body */}
@@ -297,7 +312,7 @@ export default function App() {
               (user.role === 'citizen' ? (
                 <CitizenDashboard
                   user={user}
-                  complaints={complaints}
+                  complaints={localComplaints}
                   onOpenReportModal={handleOpenReportModal}
                   onSelectComplaint={(cmp) => setSelectedComplaintDetail(cmp)}
                 />
@@ -313,8 +328,8 @@ export default function App() {
             {activeTab === 'community' && (
               <CommunityColumn
                 user={user}
-                polls={polls}
-                posts={posts}
+                polls={localPolls}
+                posts={localPosts}
                 onVotePoll={handleVotePoll}
               />
             )}
@@ -322,7 +337,7 @@ export default function App() {
             {activeTab === 'resolved' && (
               <ResolvedPage
                 currentUser={user}
-                resolvedComplaints={complaints.filter((c) => c.status === 'resolved')}
+                resolvedComplaints={localComplaints.filter((c) => c.status === 'resolved')}
                 authorities={authorities}
               />
             )}
