@@ -12,17 +12,27 @@ A web application that helps citizens post and track local issues like water lea
 * **Styling:** CSS
 * **Backend:** Node.js / TypeScript (`server.ts`)
 
-## ⚙️ Installation & Setup
-Follow these steps to run the project locally on your machine:
+## ⚙️ Setup & Live Deployment
+
+You can access the live application directly without any local installation.
+
+### 🌐 Live Application
+The project is deployed and accessible at the following URL:
+👉 **[Launch Civic Issue Platform](https://pact-295422328146.asia-southeast1.run.app)**
+
+---
+
+### 💻 Local Development Setup (Optional)
+
+If you wish to download the source code and run the development environment locally, follow these steps:
 
 ### 1. Clone the Repository
 ```bash
 git clone https://github.com
 cd YOUR-REPO-NAME
 ```
-
 ### 2. Set Up Environment Variables
-Create a `.env` file in the root directory and copy the contents from `.env.example`:
+Create a `.env` file in the root directory and configure it based on the template:
 ```bash
 cp .env.example .env
 ```
