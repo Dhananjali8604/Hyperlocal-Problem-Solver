@@ -1,0 +1,6 @@
+{
+  "name": "PACT",
+  "description": "Hyperlocal civic issue resolution and community action platform with AI verification, OTP submission, municipal dashboards, polling, and social service certificates.",
+  "requestFramePermissions": ["geolocation", "camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
